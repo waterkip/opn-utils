@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
-use Test::More;
-use Test::Exception;
+
+use OPN::Test;
 
 {
     note("OPN::Exception");
