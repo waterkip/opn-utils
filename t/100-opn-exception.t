@@ -9,6 +9,14 @@ use OPN::Test;
 
     throws_ok(
         sub {
+            throw("Some error");
+        },
+        qr#Test/Exception/throws_ok: Some error#,
+        "Message is correct"
+    );
+
+    throws_ok(
+        sub {
             throw(message => "Some error");
         },
         qr#Test/Exception/throws_ok: Some error#,

@@ -21,6 +21,10 @@ use OPN::Exception qw(:all);
 
 use OPN::Exception qw(throw);
 
+throw("My error message");
+
+# or
+
 throw(message => "my error message");
 
 # or
@@ -47,19 +51,18 @@ B<Options in order>
 
 =over 4
 
-=item type [optional]
+=item class [optional]
 
-Type: String
-Default: We try to figure out the caller.
+We try to figure out the caller and use that, or you pick one yourself.
 
 =item message [required]
-
-Type: String
 
 A human readable error message, containing more descriptive information about
 this single error
 
 =item object [optional]
+
+You can throw an object, we will 
 
 Type: Any
 
@@ -68,7 +71,15 @@ Type: Any
 =cut
 
 sub throw {
-    my $args = {@_};
+
+    my $args;
+    if (@_ == 1 && ref $_[0] eq '') { 
+        $args->{message} = shift;
+    }
+    else { 
+        $args = {@_};
+    }
+
 
     if (!$args->{class}) {
         my $caller = (caller(1))[3];
@@ -97,17 +108,23 @@ sub trace_frames {
 sub as_string {
     my $self = shift;
     my $msg = sprintf("%s: %s", $self->class, $self->message);
-    if ($self->object) {
-        {
-            local $Data::Dumper::Indent     = 0;
-            local $Data::Dumper::Varname    = "";
-            local $Data::Dumper::Terse      = 1;
-            local $Data::Dumper::Quotekeys  = 0;
-            local $Data::Dumper::Sparseseen = 1;
-            $msg = sprintf("$msg %s", Dumper $self->object);
-        }
+    if (!$self->object) {
+        return $msg;
     }
-    return $msg;
+
+    my $object;
+    if ($self->object->can('as_string')) { 
+        $object = $self->object->as_string;
+    }
+    else { 
+        local $Data::Dumper::Indent     = 0;
+        local $Data::Dumper::Varname    = "";
+        local $Data::Dumper::Terse      = 1;
+        local $Data::Dumper::Quotekeys  = 0;
+        local $Data::Dumper::Sparseseen = 1;
+        $object = Dumper $self->object;
+    }
+    return $msg . " " . $object
 }
 
 1;
