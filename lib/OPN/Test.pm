@@ -20,9 +20,6 @@ OPN::Test - Opperschaap's Test class
 
 use OPN::Test;
 
-ok
-throws_ok
-is_deeply
-done_testing
+This class exposes the methods from Test::More and Test::Exception so you don't have to worry about which package to use. Just use this one.
 
 =cut
