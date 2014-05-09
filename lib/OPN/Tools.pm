@@ -2,7 +2,7 @@ package OPN::Tools;
 use warnings;
 use strict;
 use autodie;
-use v5.14;
+use v5.10;
 
 use feature ();
 use Data::Dump qw(dumpf);
@@ -22,7 +22,7 @@ our @EXPORT = (
 sub import {
     warnings->import();
     strict->import();
-    feature->import(':5.14');
+    feature->import(':5.10');
     autodie->import(':all');
 
     OPN::Exception->import();
