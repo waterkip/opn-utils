@@ -1,7 +1,0 @@
-tags
-TAGS
-# vi tmp file
-*.sw*
-MANIFEST.bak
-Makefile
-Makefile.old
