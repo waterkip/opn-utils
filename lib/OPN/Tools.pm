@@ -47,9 +47,7 @@ sub _log {
     return join($/, @_)
         if (defined wantarray);
 
-    (defined $logger)
-        ? $logger->debug(join($/, @_))
-        : warn(scalar(localtime), " ", join($/, @_), $/);
+    warn(scalar(localtime), " ", join($/, @_), $/);
 }
 
 sub _generate_message {
@@ -61,10 +59,10 @@ sub _generate_message {
     else {
         # sprintf()'s prototype expects a scalar as the first argument, so we
         # have to split it out manually first.
-        $msg = sprintf(shift, @_);
+        $msg = sprintf(shift, @_ || ());
     }
 
-    return $msg . $/;
+    return $msg;
 }
 
 sub _dump_filter {
